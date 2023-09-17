@@ -1,0 +1,7 @@
+{
+    "require": {
+        "guzzlehttp/guzzle": "^7.0",
+        "eftec/bladeone": "^4.9",
+        "nesbot/carbon": "^2.70"
+    }
+}

@@ -1,0 +1,56 @@
+<?php  $this->startComponent('components.main', ['title' => 'Weather']); ?>
+ <div class="grid grid-cols-6 border border-black mb-2">
+ <div class="bg-sky-500 text-white font-bold border-b border-black px-1">Location</div>
+ <div class="border-b border-black px-1"><?php echo \htmlentities($location??'', ENT_QUOTES, 'UTF-8', false); ?></div>
+ <div class="bg-sky-500 text-white font-bold border-b border-black px-1">Area</div>
+ <div class="border-b border-black px-1"><?php echo \htmlentities(ucwords(strtolower($data['Location']['name']))??'', ENT_QUOTES, 'UTF-8', false); ?></div>
+ <div class="bg-sky-500 text-white font-bold border-b border-black px-1">Country</div>
+ <div class="border-b border-black px-1"><?php echo \htmlentities(ucwords(strtolower($data['Location']['country']))??'', ENT_QUOTES, 'UTF-8', false); ?></div>
+ <div class="bg-sky-500 text-white font-bold px-1">Continent</div>
+ <div class="py-1"><?php echo \htmlentities(ucwords(strtolower($data['Location']['continent']))??'', ENT_QUOTES, 'UTF-8', false); ?></div>
+ <div class="bg-sky-500 text-white font-bold px-1">Coordinates</div>
+ <div class="px-1"><?php echo \htmlentities($data['Location']['lat']??'', ENT_QUOTES, 'UTF-8', false); ?> lat <?php echo \htmlentities($data['Location']['lon']??'', ENT_QUOTES, 'UTF-8', false); ?> lon</div>
+ <div class="bg-sky-500 text-white font-bold px-1">Elevation</div>
+ <div class="px-1"><?php echo \htmlentities($data['Location']['elevation']??'', ENT_QUOTES, 'UTF-8', false); ?> m</div>
+ </div>
+ <?php ($weather = $data['Location']['Period']); ?>
+ <?php $__currentLoopData = $data['Location']['Period']; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $key => $item): $loop = $this->incrementLoopIndices();  ?>
+ <?php ($currentDate = \Carbon\Carbon::parse($item['value'])->format('j F Y')); ?>
+ <?php ($periods = $item['Rep']); ?>
+ <div class="border border-black mb-1">
+ <div class="text-2xl font-bold bg-blue-950 text-white px-1 border-b"><?php echo \htmlentities($currentDate??'', ENT_QUOTES, 'UTF-8', false); ?></div>
+ <?php $__currentLoopData = $periods; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $period): $loop = $this->incrementLoopIndices();  ?>
+ <div class="text-xl font-bold bg-sky-500 text-white px-1 border-y border-black"><?php echo \htmlentities($period['$']??'', ENT_QUOTES, 'UTF-8', false); ?></div>
+ <?php ($details = $period); ?>
+ <?php $__currentLoopData = $details; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $k => $detail): $loop = $this->incrementLoopIndices();  ?>
+ <?php if($k !== '$'): ?>
+ <div class="flex flex-row border-b border-slate-400">
+ <div class="w-64 px-1 bg-sky-200"><?php echo \htmlentities($legend[$k]['name']??'', ENT_QUOTES, 'UTF-8', false); ?></div>
+ <div class="w-auto px-1">
+ <?php switch ($k) {
+ case ('W'): ?>
+ <?php ($unit = (int) $legend[$k]['units']); ?>
+ <?php echo \htmlentities($weatherType[$unit]??'', ENT_QUOTES, 'UTF-8', false); ?>
+
+ <?php break; ?>
+ <?php case ('V'): ?>
+ <?php echo \htmlentities($visibility[$detail]??'', ENT_QUOTES, 'UTF-8', false); ?>
+
+ <?php break; ?>
+ <?php default: ?>
+ <?php echo \htmlentities($detail??'', ENT_QUOTES, 'UTF-8', false); ?> <?php echo \htmlentities($legend[$k]['units']??'', ENT_QUOTES, 'UTF-8', false); ?>
+
+ <?php } // end switch ?>
+
+
+ </div>
+ </div>
+ <?php endif; ?>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </div>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+<?php echo $this->renderComponent(); ?>
